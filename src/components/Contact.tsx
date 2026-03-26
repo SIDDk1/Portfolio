@@ -10,21 +10,26 @@ const Contact = () => {
           <div className="contact-box">
             <h4>Email</h4>
             <p>
-              <a href="mailto:example@mail.com" data-cursor="disable">
-                example@mail.com
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=sidd2004.sk@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="disable"
+              >
+                sidd2004.sk@gmail.com
               </a>
             </p>
             <h4>Phone</h4>
             <p>
-              <a href="tel:+9199999999" data-cursor="disable">
-                +91 99999 99999
+              <a href="tel:+919105830551" data-cursor="disable">
+                +91 9105830551
               </a>
             </p>
           </div>
           <div className="contact-box">
             <h4>Social</h4>
             <a
-              href="https://github.com"
+              href="https://github.com/SIDDk1"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
@@ -32,7 +37,7 @@ const Contact = () => {
               Github <MdArrowOutward />
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://linkedin.com/in/siddharthkaushik1"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
@@ -40,15 +45,15 @@ const Contact = () => {
               Linkedin <MdArrowOutward />
             </a>
             <a
-              href="https://x.com"
+              href="https://x.com/sidd2004_sk"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
             >
-              Twitter <MdArrowOutward />
+              X <MdArrowOutward />
             </a>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/siddharth.kaushik.1/"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
@@ -58,10 +63,10 @@ const Contact = () => {
           </div>
           <div className="contact-box">
             <h2>
-              Designed and Developed <br /> by <span>Moncy Yohannan</span>
+              Designed and Developed <br /> by <span>Siddharth Kaushik</span>
             </h2>
             <h5>
-              <MdCopyright /> 2024
+              <MdCopyright /> 2026
             </h5>
           </div>
         </div>
