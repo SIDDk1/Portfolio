@@ -46,6 +46,14 @@
   font-weight: 300;
   margin: 0;
 }
+.career-external-link {
+  color: var(--accentColor);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.career-external-link:hover {
+  opacity: 0.85;
+}
 .career-info-in {
   display: flex;
   width: 40%;

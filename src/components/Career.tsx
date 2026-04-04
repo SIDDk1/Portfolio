@@ -21,7 +21,16 @@ const Career = () => {
               <h3>2025</h3>
             </div>
             <p>
-              Built an AI-powered File Content Tracker using Next.js + Electron. Integrated Ollama (local LLM) for offline intelligent search. Gathered requirements as a business analyst.
+              Built an AI-powered File Content Tracker using Next.js + Electron. Integrated Ollama (local LLM) for offline intelligent search. Gathered requirements as a business analyst. Shipped a{" "}
+              <a
+                href="https://drone-detection-tracking.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="career-external-link"
+              >
+                Drone Detection &amp; Tracking dashboard
+              </a>{" "}
+              for real-time monitoring and visualization (deployed on Vercel).
             </p>
           </div>
           <div className="career-info-box">

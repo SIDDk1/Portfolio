@@ -3,76 +3,168 @@ import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useCallback, useRef } from "react";
 
 gsap.registerPlugin(useGSAP);
 
+const PROJECTS = [
+  {
+    name: "Smart Parking Detection System",
+    category: "Computer Vision & Data Analysis",
+    tools: "Python, OpenCV, Contour Analysis",
+    image: "/images/parking-space-preview.png",
+    link: "https://parking-space-ltqyupmudjjdz7eva4xepb.streamlit.app/",
+  },
+  {
+    name: "AI-Powered File Content Tracker",
+    category: "Cross-platform Desktop App",
+    tools: "Next.js, Electron, TypeScript, Ollama (AI), Node.js",
+    image: "/images/file-content-preview.png",
+    link: "https://file-content.vercel.app",
+  },
+  {
+    name: "Drone Detection & Tracking Dashboard",
+    category: "Computer Vision & Real-time Monitoring",
+    tools: "Next.js, TypeScript, React, Vercel",
+    image: "/images/drone-detection-preview.png",
+    link: "https://drone-detection-tracking.vercel.app/",
+  },
+] as const;
+
 const Work = () => {
+  const workSectionRef = useRef<HTMLDivElement>(null);
+  const scrollTrackRef = useRef<HTMLDivElement>(null);
+
   useGSAP(() => {
-  let translateX: number = 0;
+    let translateX = 0;
 
-  function setTranslateX() {
-    const box = document.getElementsByClassName("work-box");
-    const rectLeft = document
-      .querySelector(".work-container")!
-      .getBoundingClientRect().left;
-    const rect = box[0].getBoundingClientRect();
-    const parentWidth = box[0].parentElement!.getBoundingClientRect().width;
-    let padding: number =
-      parseInt(window.getComputedStyle(box[0]).padding) / 2;
-    translateX = rect.width * box.length - (rectLeft + parentWidth) + padding;
-  }
+    function setTranslateX() {
+      const box = document.getElementsByClassName("work-box");
+      if (!box.length) return;
+      const rectLeft = document
+        .querySelector(".work-container")!
+        .getBoundingClientRect().left;
+      const rect = box[0].getBoundingClientRect();
+      const parentWidth = box[0].parentElement!.getBoundingClientRect().width;
+      const padding =
+        parseInt(window.getComputedStyle(box[0]).padding, 10) / 2;
+      translateX =
+        rect.width * box.length - (rectLeft + parentWidth) + padding;
+    }
 
-  setTranslateX();
+    setTranslateX();
 
-  let timeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".work-section",
-      start: "top top",
-      end: `+=${translateX}`, // Use actual scroll width
-      scrub: true,
-      pin: true,
-      id: "work",
+    const sectionEl = workSectionRef.current;
+    sectionEl?.style.setProperty("--work-scroll-progress", "0");
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".work-section",
+        start: "top top",
+        end: `+=${translateX}`,
+        scrub: true,
+        pin: true,
+        id: "work",
+        onUpdate: (self) => {
+          sectionEl?.style.setProperty(
+            "--work-scroll-progress",
+            String(self.progress)
+          );
+        },
+      },
+    });
+
+    timeline.to(".work-flex", {
+      x: -translateX,
+      ease: "none",
+    });
+
+    return () => {
+      timeline.kill();
+      ScrollTrigger.getById("work")?.kill();
+      sectionEl?.style.removeProperty("--work-scroll-progress");
+    };
+  }, []);
+
+  const seekScrollFromTrackClientX = useCallback((clientX: number) => {
+    const track = scrollTrackRef.current;
+    const st = ScrollTrigger.getById("work");
+    if (!track || !st) return;
+    const rect = track.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    const y = st.start + (st.end - st.start) * p;
+    window.scrollTo({ top: y, behavior: "auto" });
+  }, []);
+
+  const onTrackPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      seekScrollFromTrackClientX(e.clientX);
+      const track = scrollTrackRef.current;
+      if (!track) return;
+      track.setPointerCapture(e.pointerId);
+      const onMove = (ev: PointerEvent) =>
+        seekScrollFromTrackClientX(ev.clientX);
+      const onUp = (ev: PointerEvent) => {
+        track.releasePointerCapture(ev.pointerId);
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", onUp);
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", onUp);
     },
-  });
+    [seekScrollFromTrackClientX]
+  );
 
-  timeline.to(".work-flex", {
-    x: -translateX,
-    ease: "none",
-  });
+  const jumpToProject = useCallback((index: number) => {
+    const st = ScrollTrigger.getById("work");
+    if (!st || PROJECTS.length < 2) return;
+    const p =
+      PROJECTS.length <= 1 ? 0 : index / (PROJECTS.length - 1);
+    const y = st.start + (st.end - st.start) * p;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }, []);
 
-  // Clean up (optional, good practice)
-  return () => {
-    timeline.kill();
-    ScrollTrigger.getById("work")?.kill();
-  };
-}, []);
+  const handleNext = useCallback(() => {
+    const st = ScrollTrigger.getById("work");
+    if (!st || PROJECTS.length < 2) return;
+    const currentIndex = Math.round(st.progress * (PROJECTS.length - 1));
+    const nextIndex = Math.min(currentIndex + 1, PROJECTS.length - 1);
+    jumpToProject(nextIndex);
+  }, [jumpToProject]);
+
+  const handlePrev = useCallback(() => {
+    const st = ScrollTrigger.getById("work");
+    if (!st || PROJECTS.length < 2) return;
+    const currentIndex = Math.round(st.progress * (PROJECTS.length - 1));
+    const prevIndex = Math.max(currentIndex - 1, 0);
+    jumpToProject(prevIndex);
+  }, [jumpToProject]);
+
   return (
-    <div className="work-section" id="work">
+    <div className="work-section" id="work" ref={workSectionRef}>
       <div className="work-container section-container">
-        <h2>
-          My <span>Work</span>
-        </h2>
+        <div className="work-header-container">
+          <h2>
+            My <span>Work</span>
+          </h2>
+          <div className="work-nav-arrows">
+            <button className="work-arrow-btn prev-btn" onClick={handlePrev} aria-label="Previous Project">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button className="work-arrow-btn next-btn" onClick={handleNext} aria-label="Next Project">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+        </div>
         <div className="work-flex">
-          {[
-            {
-              name: "Smart Parking Detection System",
-              category: "Computer Vision & Data Analysis",
-              tools: "Python, OpenCV, Contour Analysis",
-              image: "/images/parking-space-preview.png",
-              link: "https://parking-space-ltqyupmudjjdz7eva4xepb.streamlit.app/"
-            },
-            {
-              name: "AI-Powered File Content Tracker",
-              category: "Cross-platform Desktop App",
-              tools: "Next.js, Electron, TypeScript, Ollama (AI), Node.js",
-              image: "/images/file-content-preview.png",
-              link: "https://file-content.vercel.app"
-            }
-          ].map((project, index) => (
-            <div className="work-box" key={index}>
+          {PROJECTS.map((project, index) => (
+            <div className="work-box" key={project.link}>
               <div className="work-info">
                 <div className="work-title">
-                  <h3>0{index + 1}</h3>
+                  <h3>{String(index + 1).padStart(2, "0")}</h3>
 
                   <div>
                     <h4>{project.name}</h4>
@@ -82,9 +174,42 @@ const Work = () => {
                 <h4>Tools and features</h4>
                 <p>{project.tools}</p>
               </div>
-              <WorkImage image={project.image} alt={project.name} link={project.link} />
-             </div>
+              <WorkImage
+                image={project.image}
+                alt={project.name}
+                link={project.link}
+              />
+            </div>
           ))}
+        </div>
+
+        <div
+          className="work-scroll-nav"
+          aria-label="Browse projects: scroll the page, drag the bar, or use the shortcuts"
+        >
+          <div
+            ref={scrollTrackRef}
+            className="work-scroll-track"
+            onPointerDown={onTrackPointerDown}
+            role="presentation"
+          >
+            <div className="work-scroll-track-fill" />
+          </div>
+          <div className="work-scroll-jumps">
+            {PROJECTS.map((project, index) => (
+              <button
+                key={project.link}
+                type="button"
+                className="work-scroll-jump"
+                onClick={() => jumpToProject(index)}
+              >
+                <span className="work-scroll-jump-num">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="work-scroll-jump-name">{project.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
