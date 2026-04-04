@@ -61,6 +61,8 @@
   height: 100%;
   align-content: stretch;
   position: relative;
+  box-sizing: border-box;
+  padding-bottom: 140px;
 }
 .work-scroll-nav {
   position: absolute;
@@ -158,16 +160,13 @@
 .work-flex {
   width: 100%;
   display: flex;
-  flex: 1;
-  min-height: 0;
-  margin-bottom: 140px;
+  height: 100%;
   margin-left: -80px;
   padding-right: 120px;
   position: relative;
 }
 .work-box {
   padding: 80px;
-  padding-bottom: 150px;
   display: flex;
   flex-direction: column;
   width: 600px;
@@ -175,7 +174,7 @@
   border-right: 1px solid #363636;
   flex-shrink: 0;
   gap: 50px;
-  justify-content: start;
+  justify-content: center;
 }
 .work-flex .work-box:nth-child(even) {
   flex-direction: column-reverse;
@@ -274,7 +273,7 @@
   }
   .work-box {
     padding-top: 40px;
-    padding-bottom: 130px;
+    padding-bottom: 40px;
   }
   .work-section h2 {
     font-size: 60px;
@@ -298,7 +297,6 @@
   .work-box {
     width: 450px;
     padding: 50px;
-    padding-bottom: 130px;
   }
   .work-flex {
     margin-left: -50px;
@@ -318,7 +316,6 @@
   .work-box {
     width: 350px;
     padding: 30px;
-    padding-bottom: 140px;
   }
   .work-flex {
     margin-left: -30px;
@@ -364,7 +361,6 @@
     gap: 20px;
     width: 320px;
     padding: 20px;
-    padding-bottom: 160px;
   }
   .work-flex {
     margin-left: -15px;
@@ -388,7 +384,6 @@
   .work-box {
     width: 85vw;
     padding: 15px;
-    padding-bottom: 180px;
   }
   .work-flex {
     margin-left: -10px;
