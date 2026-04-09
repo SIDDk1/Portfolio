@@ -29,6 +29,13 @@ const PROJECTS = [
     image: "/images/drone-detection-preview.png",
     link: "https://drone-detection-tracking.vercel.app/",
   },
+  {
+    name: "Crime Detection System",
+    category: "Data Analysis & Web Application",
+    tools: "React, Vite, TypeScript, Vercel",
+    image: "/images/crime-detection-preview.png",
+    link: "https://crime-ranking.vercel.app/",
+  },
 ] as const;
 
 const Work = () => {
