@@ -1,6 +1,4 @@
 import "./styles/Certifications.css";
-import React from "react";
-
 const CERTIFICATES = [
   {
     id: 1,
