@@ -1,0 +1,179 @@
+.certifications-section {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 100px;
+  margin-bottom: 150px;
+}
+
+.certifications-section h2 {
+  font-size: 70px;
+  font-weight: 500;
+  margin-bottom: 60px;
+  padding-left: 10vw;
+}
+
+.certifications-section h2 > span {
+  color: var(--accentColor);
+}
+
+.certifications-slider-container {
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%); /* Stretch edge to edge */
+  padding: 40px 0;
+  position: relative;
+  /* Add subtle gradient fades on the edges to make the looping look clean */
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 1) 90%,
+    rgba(0, 0, 0, 0)
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 1) 90%,
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.certifications-track {
+  display: flex;
+  gap: 50px;
+  width: max-content;
+  animation: scrollCertifications 35s linear infinite;
+  padding-left: 25px; /* Half of gap to balance */
+}
+
+/* Pause the belt animation entirely when the user hovers over it so they can easily click! */
+.certifications-slider-container:hover .certifications-track {
+  animation-play-state: paused;
+}
+
+@keyframes scrollCertifications {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Translate exactly half of the duplicated list width to loop perfectly. 
+       -50% translates exactly half the track. Since the track contains 2 duplicated sets + gaps, 
+       this creates a mathematically perfect infinite scroll belt without jarring jumps. */
+    transform: translateX(calc(-50% - 25px)); 
+  }
+}
+
+.cert-card {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #363636;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.cert-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--accentColor);
+  box-shadow: 0 15px 40px rgba(170, 66, 255, 0.15);
+  background: rgba(127, 64, 255, 0.05);
+}
+
+.cert-image-container {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-bottom: 1px solid #363636;
+}
+
+.cert-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.cert-card:hover .cert-image-container img {
+  transform: scale(1.05);
+}
+
+.cert-info {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cert-info h4 {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+  color: #fff;
+}
+
+.cert-info p {
+  color: var(--accentColor);
+  font-size: 14px;
+  margin: 0;
+  font-weight: 600;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.cert-card:hover .cert-info p {
+  opacity: 1;
+}
+
+/* Responsiveness */
+@media only screen and (max-width: 1200px) {
+  .certifications-section h2 {
+    font-size: 60px;
+  }
+  .cert-card {
+    width: 350px;
+  }
+  .cert-image-container {
+    height: 220px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .certifications-section h2 {
+    font-size: 50px;
+    padding-left: 5vw;
+  }
+  .cert-card {
+    width: 300px;
+  }
+  .cert-image-container {
+    height: 200px;
+  }
+  .cert-info {
+    padding: 20px;
+  }
+  .cert-info h4 {
+    font-size: 18px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .certifications-section h2 {
+    font-size: 40px;
+  }
+  .cert-card {
+    width: 260px;
+  }
+  .cert-image-container {
+    height: 180px;
+  }
+}
