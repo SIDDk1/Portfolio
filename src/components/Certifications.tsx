@@ -6,25 +6,25 @@ const CERTIFICATES = [
     id: 1,
     name: "Advanced Web Development",
     image: "/images/cert-placeholder.png",
-    link: "https://drive.google.com/drive/folders/placeholder-link",
+    link: "https://drive.google.com/drive/folders/1Pl_UT1Ob3zl6G3Ujf5XEUY8sSta6_UyP?usp=sharing",
   },
   {
     id: 2,
     name: "React.js Certification",
     image: "/images/cert-placeholder.png",
-    link: "https://drive.google.com/drive/folders/placeholder-link",
+    link: "https://drive.google.com/drive/folders/1Pl_UT1Ob3zl6G3Ujf5XEUY8sSta6_UyP?usp=sharing",
   },
   {
     id: 3,
     name: "Full Stack Software Engineering",
     image: "/images/cert-placeholder.png",
-    link: "https://drive.google.com/drive/folders/placeholder-link",
+    link: "https://drive.google.com/drive/folders/1Pl_UT1Ob3zl6G3Ujf5XEUY8sSta6_UyP?usp=sharing",
   },
   {
     id: 4,
     name: "Python Automation",
     image: "/images/cert-placeholder.png",
-    link: "https://drive.google.com/drive/folders/placeholder-link",
+    link: "https://drive.google.com/drive/folders/1Pl_UT1Ob3zl6G3Ujf5XEUY8sSta6_UyP?usp=sharing",
   },
 ];
 
