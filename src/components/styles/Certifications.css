@@ -48,7 +48,6 @@
   gap: 50px;
   width: max-content;
   animation: scrollCertifications 200s linear infinite;
-  padding-left: 25px; /* Half of gap to balance */
 }
 
 /* Pause the belt animation entirely when the user hovers over it so they can easily click! */
@@ -64,7 +63,7 @@
     /* Translate exactly half of the duplicated list width to loop perfectly. 
        -50% translates exactly half the track. Since the track contains 2 duplicated sets + gaps, 
        this creates a mathematically perfect infinite scroll belt without jarring jumps. */
-    transform: translateX(calc(-50% - 25px)); 
+    transform: translateX(-50%); 
   }
 }
 
