@@ -26,12 +26,10 @@
   overflow: hidden;
   width: 100vw;
   padding: 40px 0;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: calc(-50vw + 50%);
 }
 
 .certifications-track {
