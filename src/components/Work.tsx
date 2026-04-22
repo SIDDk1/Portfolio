@@ -99,8 +99,8 @@ const Work = () => {
     if (!track || !st) return;
     const rect = track.getBoundingClientRect();
     const p = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-    const y = st.start + (st.end - st.start) * p;
-    window.scrollTo({ top: y, behavior: "auto" });
+    const targetScroll = st.start + (st.end - st.start) * p;
+    st.scroll(targetScroll);
   }, []);
 
   const onTrackPointerDown = useCallback(
@@ -130,8 +130,10 @@ const Work = () => {
     if (!st || PROJECTS.length < 2) return;
     const p =
       PROJECTS.length <= 1 ? 0 : index / (PROJECTS.length - 1);
-    const y = st.start + (st.end - st.start) * p;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    
+    // Use ScrollTrigger's scroll method instead of window.scrollTo
+    const targetScroll = st.start + (st.end - st.start) * p;
+    st.scroll(targetScroll);
   }, []);
 
   const handleNext = useCallback(() => {
