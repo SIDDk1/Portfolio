@@ -2,10 +2,11 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 import { useCallback, useRef } from "react";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const PROJECTS = [
   {
@@ -100,7 +101,11 @@ const Work = () => {
     const rect = track.getBoundingClientRect();
     const p = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
     const targetScroll = st.start + (st.end - st.start) * p;
-    st.scroll(targetScroll);
+    gsap.to(window, {
+      duration: 0.3,
+      scrollTo: { y: targetScroll, autoKill: false },
+      ease: "power2.out"
+    });
   }, []);
 
   const onTrackPointerDown = useCallback(
@@ -131,9 +136,13 @@ const Work = () => {
     const p =
       PROJECTS.length <= 1 ? 0 : index / (PROJECTS.length - 1);
     
-    // Use ScrollTrigger's scroll method instead of window.scrollTo
+    // Use GSAP's scrollTo plugin for smooth navigation
     const targetScroll = st.start + (st.end - st.start) * p;
-    st.scroll(targetScroll);
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: { y: targetScroll, autoKill: false },
+      ease: "power2.inOut"
+    });
   }, []);
 
   const handleNext = useCallback(() => {
