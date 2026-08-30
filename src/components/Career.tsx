@@ -15,18 +15,32 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>GenAI Systems Intern</h4>
+                <h4>Software Developer</h4>
+                <h5>Aflix Infotech Private Limited</h5>
+              </div>
+              <h3>Aug 2026 - Present</h3>
+            </div>
+            <div className="career-details">
+              <h5>Full-Stack & Software Development</h5>
+              <ul>
+                <li>Developing and maintaining full-stack web and software applications, writing clean, efficient, well-documented code across frontend and backend components.</li>
+                <li>Debugging, testing, and optimizing production applications; collaborating with the development team via Git/GitHub through code reviews and daily stand-ups.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="career-info-box">
+            <div className="career-info-in">
+              <div className="career-role">
+                <h4>Software Engineer</h4>
                 <h5>Indian Army (509 Army Base Workshop)</h5>
               </div>
-              <h3>2025 - Present</h3>
+              <h3>Jun 2025 - May 2026</h3>
             </div>
             <div className="career-details">
               <h5>Offline GenAI Document-Intelligence System</h5>
               <ul>
-                <li>Built and continue to maintain – over 1 full year – an offline GenAI document-intelligence system using Ollama and LangChain RAG to retrieve, reason over, and summarise defence documents.</li>
-                <li>Designed multi-step LLM workflows with vector-store and buffer memory, tool integration, and ReAct-style reasoning for accurate, grounded responses in a mission-critical setting.</li>
-                <li>Containerised and shipped the application with Docker and GitHub Actions CI/CD entirely inside a secure, air-gapped, no-internet defence environment.</li>
-                <li>Sustained, year-long ownership of the system from prototype to a production tool used by workshop personnel.</li>
+                <li>Developed and maintained a Python backend for an offline GenAI document-intelligence system, integrating APIs and libraries (LangChain, FAISS, Ollama) into a production RAG pipeline.</li>
+                <li>Debugged and troubleshot issues throughout development; used Git for version control while collaborating with cross-functional teams on testing and improvements.</li>
               </ul>
             </div>
           </div>
@@ -34,7 +48,7 @@ const Career = () => {
             <div className="career-info-in">
               <div className="career-role">
                 <h4>B.Tech - CSE</h4>
-                <h5>Eshan College of Engineering (AKTU)</h5>
+                <h5>Eshan College of Eng. (AKTU)</h5>
               </div>
               <h3>2022 - 2026</h3>
             </div>

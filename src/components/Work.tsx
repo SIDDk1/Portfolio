@@ -38,6 +38,13 @@ const PROJECTS = [
     link: "https://drone-detection-tracking.vercel.app/",
   },
   {
+    name: "AI-Powered Shoe Design Recognition & Matching Platform",
+    category: "Visual Search System & FAISS Vector Matching",
+    tools: "Python, FastAPI, PyTorch, FAISS, React, Capacitor/Android",
+    image: "/images/placeholder.webp",
+    link: "https://github.com/SIDDHARTHKAUSHIK1",
+  },
+  {
     name: "AI-Powered Crime Detection & Surveillance Dashboard",
     category: "Real-time Geocoded Surveillance Map & Detection Pipeline",
     tools: "React.js, Vite, FastAPI, TensorFlow, OpenCV, Docker, CI/CD, Vercel, Render",
