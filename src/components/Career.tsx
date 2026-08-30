@@ -39,8 +39,7 @@ const Career = () => {
               <h3>2022 - 2026</h3>
             </div>
             <p>
-              Reliance Foundation Scholar. <br />
-              NPTEL Certified.
+              Reliance Foundation Scholar. NPTEL Certified.
             </p>
           </div>
         </div>

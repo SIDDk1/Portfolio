@@ -165,8 +165,8 @@ const Certifications = () => {
   };
 
   return (
-    <div className="certifications-section" id="certifications">
-      <div className="certifications-header section-container">
+    <div className="certifications-section section-container" id="certifications">
+      <div className="certifications-header">
         <h2>
           My <span>Certifications</span>
         </h2>
@@ -210,7 +210,7 @@ const Certifications = () => {
               title={`View ${cert.name}`}
             >
               <div className="cert-image-container">
-                <img src={cert.image} alt={cert.name} draggable="false" loading="lazy" referrerPolicy="no-referrer" />
+                <img src={cert.image} alt={cert.name} draggable="false" loading="lazy" />
               </div>
               <div className="cert-info">
                 <h4>{cert.name}</h4>
@@ -240,11 +240,10 @@ const Certifications = () => {
             <div className="modal-image-wrapper">
               <img 
                 ref={imageRef}
-                src={CERTIFICATES[selectedCertIndex].image.replace("=w800", "=w2000")} 
+                src={CERTIFICATES[selectedCertIndex].image.replace("&sz=w800", "&sz=w2000")} 
                 alt={CERTIFICATES[selectedCertIndex].name} 
                 onClick={toggleNativeFullscreen}
                 title="Click to toggle true fullscreen"
-                referrerPolicy="no-referrer"
               />
             </div>
             <div className="modal-info-panel">
@@ -293,7 +292,7 @@ const Certifications = () => {
                   }}
                 >
                   <div className="directory-image-container">
-                    <img src={cert.image} alt={cert.name} loading="lazy" referrerPolicy="no-referrer" />
+                    <img src={cert.image} alt={cert.name} loading="lazy" />
                   </div>
                   <h4>{cert.name}</h4>
                 </div>

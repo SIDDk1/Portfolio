@@ -45,7 +45,7 @@ const Contact = () => {
               Linkedin <MdArrowOutward />
             </a>
             <a
-              href="https://x.com/SIDDHARTHK4731"
+              href="https://x.com/sidd2004_sk"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
