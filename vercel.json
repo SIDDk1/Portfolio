@@ -1,3 +1,4 @@
 {
-  "name": "siddk1-portfolio"
+  "name": "siddk1-portfolio",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
