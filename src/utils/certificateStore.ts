@@ -44,6 +44,16 @@ export const INITIAL_CERTIFICATES: Certificate[] = [
 const STORAGE_KEY = "portfolio_certificates_v1";
 const EVENT_KEY = "portfolio_certificates_changed";
 
+export function isPdfUrl(url: string): boolean {
+  if (!url) return false;
+  return (
+    url.startsWith("data:application/pdf") ||
+    url.toLowerCase().endsWith(".pdf") ||
+    url.toLowerCase().includes("application/pdf") ||
+    url.toLowerCase().includes(".pdf?")
+  );
+}
+
 export function formatGoogleDriveImageUrl(url: string): string {
   if (!url) return "";
   const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);

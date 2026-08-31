@@ -659,3 +659,47 @@
     justify-content: space-between;
   }
 }
+
+/* PDF Certificate Card & Modal Viewer Styles */
+.cert-pdf-thumbnail {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1f1429 0%, #0d0812 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--accentColor, #c2a4ff);
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.cert-pdf-thumbnail svg {
+  font-size: 54px;
+  filter: drop-shadow(0 0 10px rgba(194, 164, 255, 0.4));
+}
+
+.cert-pdf-thumbnail span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.modal-pdf-wrapper {
+  width: min(900px, 85vw);
+  height: 75vh;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #000;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(127, 64, 255, 0.2);
+}
+
+.modal-pdf-object {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

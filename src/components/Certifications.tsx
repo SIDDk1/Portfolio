@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { MdChevronLeft, MdChevronRight, MdClose, MdArrowOutward, MdFolderOpen } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdClose, MdArrowOutward, MdFolderOpen, MdPictureAsPdf } from "react-icons/md";
 import "./styles/Certifications.css";
-import { getCertificates, subscribeCertificates, Certificate } from "../utils/certificateStore";
+import { getCertificates, subscribeCertificates, isPdfUrl, Certificate } from "../utils/certificateStore";
 
 const Certifications = () => {
   const [certificates, setCertificates] = useState<Certificate[]>(getCertificates());
@@ -183,11 +183,18 @@ const Certifications = () => {
               title={`View ${cert.name}`}
             >
               <div className="cert-image-container">
-                <img src={cert.image} alt={cert.name} draggable="false" loading="lazy" referrerPolicy="no-referrer" />
+                {isPdfUrl(cert.image) ? (
+                  <div className="cert-pdf-thumbnail">
+                    <MdPictureAsPdf />
+                    <span>{cert.name} (PDF)</span>
+                  </div>
+                ) : (
+                  <img src={cert.image} alt={cert.name} draggable="false" loading="lazy" referrerPolicy="no-referrer" />
+                )}
               </div>
               <div className="cert-info">
                 <h4>{cert.name}</h4>
-                <p>Click to view fullscreen &rarr;</p>
+                <p>Click to view document &rarr;</p>
               </div>
             </div>
           ))}
@@ -210,16 +217,39 @@ const Certifications = () => {
           </button>
 
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-image-wrapper">
-              <img 
-                ref={imageRef}
-                src={certificates[selectedCertIndex].image.replace("=w800", "=w2000")} 
-                alt={certificates[selectedCertIndex].name} 
-                onClick={toggleNativeFullscreen}
-                title="Click to toggle true fullscreen"
-                referrerPolicy="no-referrer"
-              />
-            </div>
+            {isPdfUrl(certificates[selectedCertIndex].image) ? (
+              <div className="modal-pdf-wrapper">
+                <object
+                  data={certificates[selectedCertIndex].image}
+                  type="application/pdf"
+                  className="modal-pdf-object"
+                >
+                  <div style={{ padding: "40px", textAlign: "center", color: "#fff" }}>
+                    <MdPictureAsPdf style={{ fontSize: "60px", color: "#c2a4ff" }} />
+                    <h3>{certificates[selectedCertIndex].name}</h3>
+                    <a
+                      href={certificates[selectedCertIndex].image}
+                      download={`${certificates[selectedCertIndex].name}.pdf`}
+                      className="modal-external-link"
+                      style={{ display: "inline-flex", marginTop: "20px" }}
+                    >
+                      Download PDF Certificate
+                    </a>
+                  </div>
+                </object>
+              </div>
+            ) : (
+              <div className="modal-image-wrapper">
+                <img 
+                  ref={imageRef}
+                  src={certificates[selectedCertIndex].image.replace("=w800", "=w2000")} 
+                  alt={certificates[selectedCertIndex].name} 
+                  onClick={toggleNativeFullscreen}
+                  title="Click to toggle true fullscreen"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            )}
             <div className="modal-info-panel">
               <h3>{certificates[selectedCertIndex].name}</h3>
               {certificates[selectedCertIndex].link && certificates[selectedCertIndex].link !== "#" && (
@@ -268,7 +298,14 @@ const Certifications = () => {
                   }}
                 >
                   <div className="directory-image-container">
-                    <img src={cert.image} alt={cert.name} loading="lazy" referrerPolicy="no-referrer" />
+                    {isPdfUrl(cert.image) ? (
+                      <div className="cert-pdf-thumbnail">
+                        <MdPictureAsPdf />
+                        <span style={{ fontSize: "10px" }}>PDF Document</span>
+                      </div>
+                    ) : (
+                      <img src={cert.image} alt={cert.name} loading="lazy" referrerPolicy="no-referrer" />
+                    )}
                   </div>
                   <h4>{cert.name}</h4>
                 </div>

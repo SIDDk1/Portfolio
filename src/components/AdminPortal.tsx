@@ -5,9 +5,10 @@ import {
   deleteCertificate,
   resetCertificates,
   subscribeCertificates,
+  isPdfUrl,
   Certificate,
 } from "../utils/certificateStore";
-import { MdArrowBack, MdCloudUpload, MdDelete, MdOpenInNew, MdRefresh, MdAddCircleOutline } from "react-icons/md";
+import { MdArrowBack, MdCloudUpload, MdDelete, MdOpenInNew, MdRefresh, MdAddCircleOutline, MdPictureAsPdf } from "react-icons/md";
 import "./styles/AdminPortal.css";
 
 const AdminPortal: React.FC = () => {
@@ -29,8 +30,8 @@ const AdminPortal: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert("File size is too large. Please select an image under 5MB.");
+      if (file.size > 8 * 1024 * 1024) {
+        alert("File size is too large. Please select a file under 8MB.");
         return;
       }
       const reader = new FileReader();
@@ -52,7 +53,7 @@ const AdminPortal: React.FC = () => {
 
     const finalImage = imageType === "file" ? imageFileData : imageUrl.trim();
     if (!finalImage) {
-      alert("Please upload an image file or provide an image URL.");
+      alert("Please upload an image/PDF file or provide an image/PDF URL.");
       return;
     }
 
@@ -89,7 +90,7 @@ const AdminPortal: React.FC = () => {
         <div className="admin-header">
           <div className="admin-header-title">
             <h1>Certificate Admin Portal</h1>
-            <p>Directly upload & manage certificates visible on your live portfolio</p>
+            <p>Directly upload & manage certificates (Images & PDFs) visible on your live portfolio</p>
           </div>
           <a href="/" className="admin-back-btn">
             <MdArrowBack /> Back to Main Portfolio
@@ -129,21 +130,21 @@ const AdminPortal: React.FC = () => {
               </div>
 
               <div className="admin-form-group">
-                <label>Certificate Image Source *</label>
+                <label>Certificate Document / Image Source *</label>
                 <div className="image-tab-buttons">
                   <button
                     type="button"
                     className={`image-tab-btn ${imageType === "file" ? "active" : ""}`}
                     onClick={() => setImageType("file")}
                   >
-                    Upload Image File
+                    Upload Image or PDF File
                   </button>
                   <button
                     type="button"
                     className={`image-tab-btn ${imageType === "url" ? "active" : ""}`}
                     onClick={() => setImageType("url")}
                   >
-                    Image URL / Drive Link
+                    Image/PDF URL or Drive Link
                   </button>
                 </div>
 
@@ -152,18 +153,20 @@ const AdminPortal: React.FC = () => {
                     <MdCloudUpload className="file-dropzone-icon" />
                     <div>
                       {imageFileData ? (
-                        <span style={{ color: "#c2a4ff" }}>✓ Image File Selected</span>
+                        <span style={{ color: "#c2a4ff" }}>
+                          ✓ {isPdfUrl(imageFileData) ? "PDF Document Selected" : "Image File Selected"}
+                        </span>
                       ) : (
-                        <span>Click or Drag & Drop certificate image (JPG/PNG/WebP)</span>
+                        <span>Click or Drag & Drop certificate file (JPG, PNG, WebP, or PDF)</span>
                       )}
                     </div>
-                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                    <input type="file" accept="image/*,.pdf,application/pdf" onChange={handleFileChange} />
                   </label>
                 ) : (
                   <input
                     type="text"
                     className="admin-input"
-                    placeholder="Paste image URL or Google Drive link"
+                    placeholder="Paste image/PDF URL or Google Drive link"
                     value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
                   />
@@ -182,14 +185,21 @@ const AdminPortal: React.FC = () => {
             <div className="preview-card-container">
               <div className="cert-preview-card">
                 {previewImage ? (
-                  <img
-                    src={previewImage}
-                    alt="Preview"
-                    className="cert-preview-image"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/images/placeholder.webp";
-                    }}
-                  />
+                  isPdfUrl(previewImage) ? (
+                    <div className="cert-pdf-thumbnail" style={{ height: "220px" }}>
+                      <MdPictureAsPdf />
+                      <span>PDF Document Certificate</span>
+                    </div>
+                  ) : (
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="cert-preview-image"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/placeholder.webp";
+                      }}
+                    />
+                  )
                 ) : (
                   <div
                     style={{
@@ -201,7 +211,7 @@ const AdminPortal: React.FC = () => {
                       background: "#000",
                     }}
                   >
-                    Image Preview Area
+                    Image/PDF Preview Area
                   </div>
                 )}
                 <div className="cert-preview-info">
@@ -237,15 +247,22 @@ const AdminPortal: React.FC = () => {
             {filteredCerts.map((cert) => (
               <div key={cert.id} className="admin-cert-item">
                 {cert.isCustom && <div className="badge-custom">Custom Upload</div>}
-                <img
-                  src={cert.image}
-                  alt={cert.name}
-                  className="admin-cert-thumb"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/images/placeholder.webp";
-                  }}
-                />
+                {isPdfUrl(cert.image) ? (
+                  <div className="cert-pdf-thumbnail" style={{ height: "160px" }}>
+                    <MdPictureAsPdf />
+                    <span>PDF Document</span>
+                  </div>
+                ) : (
+                  <img
+                    src={cert.image}
+                    alt={cert.name}
+                    className="admin-cert-thumb"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/images/placeholder.webp";
+                    }}
+                  />
+                )}
                 <div className="admin-cert-details">
                   <h4>{cert.name}</h4>
                   <div className="admin-cert-actions">
