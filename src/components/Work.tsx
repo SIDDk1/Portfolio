@@ -41,7 +41,7 @@ const PROJECTS = [
     name: "AI-Powered Shoe Design Recognition & Matching Platform",
     category: "Visual Search System & FAISS Vector Matching",
     tools: "Python, FastAPI, PyTorch, FAISS, React, Capacitor/Android",
-    image: "/images/placeholder.webp",
+    image: "/images/shoe-design-preview.png",
     link: "https://github.com/SIDDHARTHKAUSHIK1",
   },
   {
