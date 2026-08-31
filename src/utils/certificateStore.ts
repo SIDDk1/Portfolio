@@ -54,6 +54,72 @@ export function isPdfUrl(url: string): boolean {
   );
 }
 
+export async function convertPdfToImage(dataUrlOrFile: string | File): Promise<string> {
+  return new Promise(async (resolve) => {
+    try {
+      if (typeof window === "undefined") {
+        resolve(typeof dataUrlOrFile === "string" ? dataUrlOrFile : "");
+        return;
+      }
+
+      if (!(window as any).pdfjsLib) {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+        document.head.appendChild(script);
+        await new Promise((res) => {
+          script.onload = res;
+          script.onerror = res;
+        });
+        if ((window as any).pdfjsLib) {
+          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        }
+      }
+
+      const pdfjsLib = (window as any).pdfjsLib;
+      if (!pdfjsLib) {
+        resolve(typeof dataUrlOrFile === "string" ? dataUrlOrFile : "");
+        return;
+      }
+
+      let arrayBuffer: ArrayBuffer;
+      if (dataUrlOrFile instanceof File) {
+        arrayBuffer = await dataUrlOrFile.arrayBuffer();
+      } else if (typeof dataUrlOrFile === "string" && dataUrlOrFile.startsWith("data:")) {
+        const base64 = dataUrlOrFile.split(",")[1];
+        const binaryStr = atob(base64);
+        const len = binaryStr.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryStr.charCodeAt(i);
+        }
+        arrayBuffer = bytes.buffer;
+      } else {
+        resolve(typeof dataUrlOrFile === "string" ? dataUrlOrFile : "");
+        return;
+      }
+
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      if (context) {
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        const imgDataUrl = canvas.toDataURL("image/png");
+        resolve(imgDataUrl);
+        return;
+      }
+    } catch (err) {
+      console.warn("Could not render PDF page to image preview:", err);
+    }
+    resolve(typeof dataUrlOrFile === "string" ? dataUrlOrFile : "");
+  });
+}
+
 export function formatGoogleDriveImageUrl(url: string): string {
   if (!url) return "";
   const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);

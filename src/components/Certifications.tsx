@@ -184,10 +184,11 @@ const Certifications = () => {
             >
               <div className="cert-image-container">
                 {isPdfUrl(cert.image) ? (
-                  <div className="cert-pdf-thumbnail">
-                    <MdPictureAsPdf />
-                    <span>{cert.name} (PDF)</span>
-                  </div>
+                  <iframe
+                    src={`${cert.image}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`}
+                    title={cert.name}
+                    style={{ width: "100%", height: "100%", border: "none", pointerEvents: "none" }}
+                  />
                 ) : (
                   <img src={cert.image} alt={cert.name} draggable="false" loading="lazy" referrerPolicy="no-referrer" />
                 )}
@@ -299,10 +300,11 @@ const Certifications = () => {
                 >
                   <div className="directory-image-container">
                     {isPdfUrl(cert.image) ? (
-                      <div className="cert-pdf-thumbnail">
-                        <MdPictureAsPdf />
-                        <span style={{ fontSize: "10px" }}>PDF Document</span>
-                      </div>
+                      <iframe
+                        src={`${cert.image}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`}
+                        title={cert.name}
+                        style={{ width: "100%", height: "100%", border: "none", pointerEvents: "none" }}
+                      />
                     ) : (
                       <img src={cert.image} alt={cert.name} loading="lazy" referrerPolicy="no-referrer" />
                     )}

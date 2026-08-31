@@ -6,9 +6,10 @@ import {
   resetCertificates,
   subscribeCertificates,
   isPdfUrl,
+  convertPdfToImage,
   Certificate,
 } from "../utils/certificateStore";
-import { MdArrowBack, MdCloudUpload, MdDelete, MdOpenInNew, MdRefresh, MdAddCircleOutline, MdPictureAsPdf } from "react-icons/md";
+import { MdArrowBack, MdCloudUpload, MdDelete, MdOpenInNew, MdRefresh, MdAddCircleOutline } from "react-icons/md";
 import "./styles/AdminPortal.css";
 
 const AdminPortal: React.FC = () => {
@@ -18,6 +19,7 @@ const AdminPortal: React.FC = () => {
   const [imageType, setImageType] = useState<"file" | "url">("file");
   const [imageUrl, setImageUrl] = useState("");
   const [imageFileData, setImageFileData] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
   const [search, setSearch] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -27,17 +29,28 @@ const AdminPortal: React.FC = () => {
     });
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        alert("File size is too large. Please select a file under 8MB.");
+      if (file.size > 15 * 1024 * 1024) {
+        alert("File size is too large. Please select a file under 15MB.");
         return;
       }
+      setIsProcessing(true);
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         if (event.target?.result) {
-          setImageFileData(event.target.result as string);
+          const rawData = event.target.result as string;
+          if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+            const visualPreview = await convertPdfToImage(rawData);
+            setImageFileData(visualPreview);
+            if (!link) {
+              setLink(rawData);
+            }
+          } else {
+            setImageFileData(rawData);
+          }
+          setIsProcessing(false);
         }
       };
       reader.readAsDataURL(file);
@@ -152,10 +165,10 @@ const AdminPortal: React.FC = () => {
                   <label className="file-dropzone">
                     <MdCloudUpload className="file-dropzone-icon" />
                     <div>
-                      {imageFileData ? (
-                        <span style={{ color: "#c2a4ff" }}>
-                          ✓ {isPdfUrl(imageFileData) ? "PDF Document Selected" : "Image File Selected"}
-                        </span>
+                      {isProcessing ? (
+                        <span style={{ color: "#c2a4ff" }}>⌛ Converting PDF page to visual preview...</span>
+                      ) : imageFileData ? (
+                        <span style={{ color: "#c2a4ff" }}>✓ Document/Image File Ready</span>
                       ) : (
                         <span>Click or Drag & Drop certificate file (JPG, PNG, WebP, or PDF)</span>
                       )}
@@ -173,8 +186,8 @@ const AdminPortal: React.FC = () => {
                 )}
               </div>
 
-              <button type="submit" className="submit-btn">
-                Add & Publish Certificate
+              <button type="submit" className="submit-btn" disabled={isProcessing}>
+                {isProcessing ? "Processing File..." : "Add & Publish Certificate"}
               </button>
             </form>
           </div>
@@ -186,10 +199,12 @@ const AdminPortal: React.FC = () => {
               <div className="cert-preview-card">
                 {previewImage ? (
                   isPdfUrl(previewImage) ? (
-                    <div className="cert-pdf-thumbnail" style={{ height: "220px" }}>
-                      <MdPictureAsPdf />
-                      <span>PDF Document Certificate</span>
-                    </div>
+                    <iframe
+                      src={`${previewImage}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`}
+                      title="PDF Preview"
+                      className="cert-preview-image"
+                      style={{ border: "none", pointerEvents: "none" }}
+                    />
                   ) : (
                     <img
                       src={previewImage}
@@ -248,10 +263,12 @@ const AdminPortal: React.FC = () => {
               <div key={cert.id} className="admin-cert-item">
                 {cert.isCustom && <div className="badge-custom">Custom Upload</div>}
                 {isPdfUrl(cert.image) ? (
-                  <div className="cert-pdf-thumbnail" style={{ height: "160px" }}>
-                    <MdPictureAsPdf />
-                    <span>PDF Document</span>
-                  </div>
+                  <iframe
+                    src={`${cert.image}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`}
+                    title={cert.name}
+                    className="admin-cert-thumb"
+                    style={{ border: "none", pointerEvents: "none" }}
+                  />
                 ) : (
                   <img
                     src={cert.image}
